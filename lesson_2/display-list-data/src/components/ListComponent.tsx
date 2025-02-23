@@ -1,16 +1,25 @@
 import { useState } from 'react';
 
-const ListComponent = () => {
-  const people = ['John', 'Jane', 'Jack', 'Jill'];
+interface ListComponentProps {
+  items: string[];
+  heading: string;
+}
+
+const ListComponent = ({heading, items}: ListComponentProps) => {
+  
 
   const [selectedItem, setSelectedItem] = useState(0);
+
+    function handleClick(item: string) {
+        console.log(item);
+    }
 
   return (
     <>
       <div className="flex flex-col justify-center items-center">
-        <h1 className="text-2xl font-bold">People</h1>
+        <h1 className="text-2xl font-bold">{heading}</h1>
         <ul className="w-1/2 border border-gray-200 rounded-lg divide-y divide-gray-300 overflow-hidden">
-          {people.map((person, i) => (
+          {items.map((item, i) => (
             <li
               className={
                 selectedItem === i
@@ -18,9 +27,14 @@ const ListComponent = () => {
                   : 'py-2 px-3'
               }
               key={i}
-              onClick={() => setSelectedItem(i)}
+              onClick={
+                () => {
+                    setSelectedItem(i);
+                    handleClick(item);
+                }
+              }
             >
-              {person}
+              {item}
             </li>
           ))}
         </ul>
