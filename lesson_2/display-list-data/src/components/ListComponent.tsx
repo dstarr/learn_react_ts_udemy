@@ -1,23 +1,19 @@
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 
 interface ListComponentProps {
   items: string[];
-  heading: string;
+  children: ReactNode;
+  onSelectItem: (item: string) => void;
 }
 
-const ListComponent = ({heading, items}: ListComponentProps) => {
-  
+const ListComponent = ({children, items, onSelectItem}: ListComponentProps) => {
 
   const [selectedItem, setSelectedItem] = useState(0);
-
-    function handleClick(item: string) {
-        console.log(item);
-    }
-
+  
   return (
     <>
       <div className="flex flex-col justify-center items-center">
-        <h1 className="text-2xl font-bold">{heading}</h1>
+        {children}
         <ul className="w-1/2 border border-gray-200 rounded-lg divide-y divide-gray-300 overflow-hidden">
           {items.map((item, i) => (
             <li
@@ -27,12 +23,10 @@ const ListComponent = ({heading, items}: ListComponentProps) => {
                   : 'py-2 px-3'
               }
               key={i}
-              onClick={
-                () => {
-                    setSelectedItem(i);
-                    handleClick(item);
-                }
-              }
+              onClick={() => {
+                setSelectedItem(i);
+                onSelectItem(item);
+              }}
             >
               {item}
             </li>
