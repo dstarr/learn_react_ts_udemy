@@ -11,7 +11,7 @@ const App = () => {
                 justifyContent: 'center',
                 height: '100vh',
                 alignItems: 'center'}}>
-        <PrimaryBtn />        
+            <PrimaryBtn />
         </div>
     );
 }
