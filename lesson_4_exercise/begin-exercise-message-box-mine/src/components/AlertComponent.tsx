@@ -2,7 +2,7 @@ import { ReactNode } from "react"
 
 interface AlertComponentProps {
     title: string,
-    titleColor?: "text-purple-500" | "text-red-500" | "text-green-500" | "text-yellow-500",
+    titleColor: "text-purple-500" | "text-red-500" | "text-green-500" | "text-yellow-500",
     children: ReactNode
 }
 
@@ -15,7 +15,7 @@ const AlertComponent = ({title, titleColor='text-red-500', children}: AlertCompo
                 <span className={`font-medium text-xl ${titleColor}`}>{title}</span>
 
                 {/* Pass the children here. */}
-                <div>
+                <div className="text-sm text-gray-500">
                     {children}
                 </div>
             </div>

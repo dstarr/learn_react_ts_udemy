@@ -5,12 +5,8 @@ const App = () => {
 
     const [showAlert, setShowAlert] = useState(false);
     
-    function handleShowAlert(): void {
-        if (showAlert) {
-            setShowAlert(false);
-        }
-        else
-            setShowAlert(true);
+    const handleShowAlert = (): void => { 
+        setShowAlert(!showAlert);
     }
     
 
@@ -19,8 +15,8 @@ const App = () => {
             <div className="flex flex-col gap-4 justify-center items-center h-screen bg-gray-200">
 
             {
-                showAlert && <AlertComponent titleColor="text-purple-500" title="Hello World">
-                                <p className="text-sm text-gray-500">This is a message box.</p>
+                showAlert && <AlertComponent  title="Title text" titleColor="text-purple-500">
+                                <p>This is a message box.</p>
                              </AlertComponent>
             }
                 
