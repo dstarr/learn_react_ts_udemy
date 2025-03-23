@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.list-style {
+    @apply m-4 border-2 border-gray-300 rounded-xl overflow-hidden;
+}
+
+.list-item-style {
+    @apply p-3 hover:bg-gradient-to-tr from-blue-600 to-red-600 hover:text-white hover:cursor-pointer;
+}
