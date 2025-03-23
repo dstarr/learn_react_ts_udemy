@@ -11,8 +11,15 @@ const App = () => {
         }
     })
 
+    // Update the user's email using 2 levels of depth in an object structure
     const handleUpdate = () => {
-        //
+        setUser({
+            ...user,
+            contact: {
+                ...user.contact,
+                email: "john.doe@example.com"
+            }
+        });
     }
 
     return (
@@ -26,8 +33,11 @@ const App = () => {
                 <span>Mobile: {user.contact.mobile}</span>
                 <span>Landline: {user.contact.landline}</span>
                 <span>Email: {user.contact.email}</span>
+                
                 <button onClick={handleUpdate}>Update</button>
             </div>
+
+            
         </>
     )
 }
