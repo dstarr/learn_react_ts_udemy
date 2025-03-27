@@ -1,94 +1,75 @@
-import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
-
-interface User {
-  id: string;
-  first_name: string;
-  middle_name: string;
-  last_name: string;
-  email: string;
-}
+import { CanceledError } from "./services/api-client";
+import userService, { User } from "./services/user-services";
 
 const App = () => {
-  
   const [users, setUsers] = useState<User[]>([]);
   const [error, setError] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    // side effect
-
-    const controller = new AbortController();
-
     setIsLoading(true);
 
-    axios
-      .get<User[]>("https://jsonfakery.com/users/random/10", {
-        signal: controller.signal,
-      })
+    const { request, cancel } = userService.getAll<User>();
+
+    request
       .then((response) => {
-        setUsers(response.data);
-        setIsLoading(false);
+        console.log(response);
+
+        if (!response) return;
+
+        if (response.data) {
+          setUsers(response.data as User[]);
+          setIsLoading(false);
+        }
       })
       .catch((error) => {
+        if (error instanceof CanceledError) return;
         console.error("Error fetching users:", error);
-
-        if (axios.isAxiosError(error)) {
-
-          if (error.name === "CanceledError") {
-            return;
-          }
-  
-          setError(error.response?.data.message);
-
-        } else {
-          setError(error.message);
-        }
-
+        setError(error.message);
         setIsLoading(false);
-
       });
 
-    return () => controller.abort();
+    return () => cancel();
   }, []);
 
   return (
     <>
       <div className="flex flex-col items-center justify-center h-screen">
-      <h1 className="text-3xl font-bold">Connecting to API</h1>
+        <h1 className="text-3xl font-bold">Connecting to API</h1>
 
-      {isLoading && <p className="text-blue-500">Loading...</p>}
+        {isLoading && <p className="text-blue-500">Loading...</p>}
 
-      {error && (
-        <svg
-          className="animate-spin -ml-1 mr-3 h-5 w-5 text-blue-500"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-        >
-          <circle
-            className="opacity-25"
-            cx="12"
-            cy="12"
-            r="10"
-            stroke="currentColor"
-            strokeWidth="4"
-          ></circle>
-          <path
-            className="opacity-75"
-            fill="currentColor"
-            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-          ></path>
-        </svg>
-      )}
+        {error && (
+          <svg
+            className="animate-spin -ml-1 mr-3 h-5 w-5 text-blue-500"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+            ></circle>
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
+          </svg>
+        )}
 
-      <ul>
-        {users.map((user) => (
-          <li key={user.id}>
-            {user.first_name} {user.middle_name} {user.last_name}
-          </li>
-        ))}
-      </ul>
+        <ul>
+          {users.map((user) => (
+            <li key={user.id}>
+              {user.first_name} {user.middle_name} {user.last_name}
+            </li>
+          ))}
+        </ul>
       </div>
     </>
   );
