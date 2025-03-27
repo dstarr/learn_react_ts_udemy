@@ -1,8 +1,7 @@
 import apiClient, { CanceledError } from "./api-client";
 
 class GlobalHttpService {
-  
-    private endpoint: string;
+  private endpoint: string;
 
   constructor(endpoint: string) {
     this.endpoint = endpoint;
@@ -32,8 +31,8 @@ class GlobalHttpService {
   }
 }
 
-const create = (endpoint: string) => { 
-    return new GlobalHttpService(endpoint);
-}
+const create = (endpoint: string) => {
+  return new GlobalHttpService(endpoint);
+};
 
 export default create;

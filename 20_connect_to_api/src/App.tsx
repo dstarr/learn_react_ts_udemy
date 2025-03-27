@@ -1,42 +1,13 @@
-import { useEffect, useState } from "react";
-import { CanceledError } from "./services/api-client";
-import userService, { User } from "./services/user-services";
+import useUsers from "./hooks/useUsers";
 
 const App = () => {
-  const [users, setUsers] = useState<User[]>([]);
-  const [error, setError] = useState<string>("");
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    setIsLoading(true);
-
-    const { request, cancel } = userService.getAll<User>();
-
-    request
-      .then((response) => {
-        console.log(response);
-
-        if (!response) return;
-
-        if (response.data) {
-          setUsers(response.data as User[]);
-          setIsLoading(false);
-        }
-      })
-      .catch((error) => {
-        if (error instanceof CanceledError) return;
-        console.error("Error fetching users:", error);
-        setError(error.message);
-        setIsLoading(false);
-      });
-
-    return () => cancel();
-  }, []);
+  const { users, error, isLoading } = useUsers();
 
   return (
     <>
       <div className="flex flex-col items-center justify-center h-screen">
-        <h1 className="text-3xl font-bold">Connecting to API</h1>
+        <h1 className="text-3xl font-bold py-6">Connecting to API</h1>
 
         {isLoading && <p className="text-blue-500">Loading...</p>}
 
